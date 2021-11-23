@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1637622471 source:c:\users\1\downloads\utn\laboratorio-programacion\gmm\linkedlistprueba\linkedlist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"LinkedList.h"
+
+1637600863 c:\users\1\downloads\utn\laboratorio-programacion\gmm\linkedlistprueba\linkedlist.h
+
+1637622456 source:c:\users\1\downloads\utn\laboratorio-programacion\gmm\linkedlistprueba\main.c
+	<stdio.h>
+	<stdlib.h>
+	"LinkedList.h"
+

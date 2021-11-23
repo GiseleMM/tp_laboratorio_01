@@ -5,13 +5,47 @@
  *      Author: 1
  */
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+
+int validarName(char name[],int len)
+{
+    int todoOk=0;
+    if(name!=NULL  && len>0)
+    {
+        if(strlen(name)<len)
+        {
+        	int i=0;
+           while(name[i]!='\0')
+           {
+        	   todoOk=1;
+                if(isdigit(name[i]))
+                {
+                	printf("ingrese a isdigit %d",i);
+                    todoOk=-1;
+                    break;
+                }
+
+                i++;
+            }
+        }
+        else
+        {
+            todoOk=-1;
+        }
+
+    }
+    //printf("retorno de validar name %d\n",todoOk);
+    return todoOk;
+}
 
 int pedirName(char name[],char mensaje[],char mensajeError[], int len)
 {
-    int todoOk=-1;
+    int todoOk=0;
     if(name!=NULL && len>0)
     {
-        todoOk=0;
+        todoOk=1;
         fflush(stdin);
         printf("%s", mensaje);
         gets(name);
@@ -38,46 +72,28 @@ int pedirName(char name[],char mensaje[],char mensajeError[], int len)
         }
 
     }
-
+//printf("retorno de pedir name %d\n",todoOk);
     return todoOk;
 
 
 }
-int validarName(char name[],int len)
+int validarRangoEntero(int num,  int limSuperior,int limInferior)
 {
     int todoOk=0;
-    if(name!=NULL  && len>0)
+    if(num<=limSuperior && num>=limInferior)
     {
-        if(strlen(name)<len)
-        {
-            for(int i=0; i<len; i++)
-            {
-
-                if(isdigit(name[i]))
-                {
-                    todoOk=-1;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            todoOk=-1;
-        }
-
+        todoOk=1;
     }
-
     return todoOk;
 }
-
 int pedirEntero(int* entero,char mensaje[],char mensajeError[],int limSup,int limInf)
 {
-    int todoOk=-1;
+    int todoOk=0;
     // int retornoValidarRango;
     int auxEntero;
     if(entero!=NULL && mensaje!=NULL && mensajeError!=NULL && limInf<=limSup)
     {
-        todoOk=0;
+        todoOk=1;
         printf("%s\n",mensaje);
         while(!scanf("%d",&auxEntero))
         {
@@ -101,12 +117,16 @@ int pedirEntero(int* entero,char mensaje[],char mensajeError[],int limSup,int li
     }
     return todoOk;
 }
-int validarRangoEntero(int num,  int limSuperior,int limInferior)
+
+int validarCaracter(char auxChar, char a, char b)
 {
-    int todoOk=0;
-    if(num<=limSuperior && num>=limInferior)
+
+    int todoOk=1;
+    if(auxChar!=a && auxChar!=b)
     {
-        todoOk=1;
+
+        todoOk=0;
     }
+
     return todoOk;
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../inc/LinkedList.h"
+#include "LinkedList.h"
 
 
 static Node* getNode(LinkedList* this, int nodeIndex);
@@ -496,7 +496,6 @@ LinkedList* ll_clone(LinkedList* this)
  * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
                                 ( 0) Si ok
  */
-
 int ll_sort(LinkedList* this, int (*pFunc)(void*,void*), int order)
 {
 
@@ -524,29 +523,3 @@ int ll_sort(LinkedList* this, int (*pFunc)(void*,void*), int order)
     return returnAux;
 
 }
-
-LinkedList* ll_filter(LinkedList* this, int (*pFunc)(void*) )
-{
-    LinkedList* filterList = NULL;
-    void* elemento = NULL;
-    int tam;
-
-    if (this != NULL && pFunc != NULL)
-    {
-        filterList = ll_newLinkedList();
-        if (filterList != NULL)
-        {
-            tam = ll_len(this);
-            for (int i=0; i<tam; i++)
-            {
-                elemento = ll_get(this, i);
-                if ( pFunc(elemento) )
-                {
-                    ll_add(filterList, elemento);
-                }
-            }
-        }
-    }
-    return filterList;
-}
-

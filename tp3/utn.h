@@ -12,5 +12,7 @@ int pedirName(char name[],char mensaje[],char mensajeError[], int len);
 int validarName(char name[],int len);
 int pedirEntero(int* entero,char mensaje[],char mensajeError[],int limSup,int limInf);
 int validarRangoEntero(int num,  int limSuperior,int limInferior);
+int validarCaracter(char auxChar, char a, char b);
+
 
 #endif /* UTN_H_ */

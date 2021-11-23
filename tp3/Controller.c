@@ -3,6 +3,8 @@
 #include "LinkedList.h"
 #include "Employee.h"
 #include "utn.h"
+#include "parser.h"
+// no exite crear #include "parser.h"
 
 
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo texto).
@@ -21,7 +23,9 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 		f=fopen(path,"r");
 		if(f!=NULL)
 		{
-			 if(parser_EmployeeFromText(f,pArrayListEmployee))
+
+			printf("Archivo %s abierto modo lectura\n",path);
+			if(parser_EmployeeFromText(f,pArrayListEmployee))
 			 {
 				 printf("se cargo con exito");
 				 todoOk=1;
@@ -54,6 +58,7 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 		f=fopen(path,"rb");
 		if(f!=NULL)
 		{
+			printf("Archivo %s abierto modo lectura binaria\n",path);
 			if(parser_EmployeeFromBinary(f,pArrayListEmployee))
 			{
 				printf("se cargo con exito\n");
@@ -79,47 +84,19 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_addEmployee(LinkedList* pArrayListEmployee)
 {
-    int todoOk=0;
-    char name[128];
-    int horasTrabajadas;
-    int sueldo;
-    int id;
-    int retornodeSetterId;
-    int retornodeSetterNombre;
-    int retornodeSetterSueldo;
-    int retornodeSetterHoras;
-    Employee* auxiliar;
-    if(pArrayListEmployee!=NULL)
-    {
-    	printf("***Alta Employee***\n");
-
-    	auxiliar=newEmployee();
-    	id=employee_mayorId(pArrayListEmployee);
-    	if(id!=-1)
-    	{
-    		id=id+1;//Asigno el siguiente
-    		pedirName(name,"Ingrese nombre","Error Reingrese Nombre",128);
-    		pedirEntero(&horasTrabajadas,"Ingrese horas trabajadas (valor positivo)","Error Reingrese horas ",3000,4);
-    		pedirEntero(&sueldo,"Ingrese sueldo","Error Reingrese sueldo",0,100000);
-
-    		//llamo a los setter
-    		retornodeSetterId=employee_setId(auxiliar,id);
-    		retornodeSetterNombre=employee_setNombre(auxiliar,name);
-    		retornodeSetterHoras=employee_setHoras(auxiliar,horasTrabajadas);
-    		retornodeSetterSueldo=employee_setSueldo(auxiliar,sueldo);
-    		if(retornodeSetterId && retornodeSetterNombre && retornodeSetterHoras && retornodeSetterSueldo)
-    		{
-    			ll_add(pArrayListEmployee,auxiliar);
-    			printf("Empleado cargado\n");
-    			todoOk=1;
-    		}
-    		else
-    		{
-    			employee_delete(auxiliar);
-    		}
-    	}
-    }
-
+	int todoOk=0;
+	if(pArrayListEmployee!=NULL)
+	{
+		if(!employee_alta(pArrayListEmployee))
+		{
+			printf("No se pudo realizar el alta\n");
+		}
+		else
+		{
+			printf("alta exitosa\n");
+			todoOk=1;
+		}
+	}
 	return todoOk;
 }
 
@@ -133,8 +110,19 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
 	int todoOk=0;
+
 	if(pArrayListEmployee!=NULL)
 	{
+		if(!employee_modificar(pArrayListEmployee))
+		{
+			printf("No se pudo realizar la modificacion \n");
+
+		}
+		else
+		{
+			printf("Modificacion registrada\n");
+			todoOk=1;
+		}
 
 	}
 
@@ -151,7 +139,20 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int todoOk=0;
+    if(pArrayListEmployee!=NULL)
+    {
+    	if(!employee_baja(pArrayListEmployee))
+    	{
+    		printf("No se pudo realizar la Baja en el sistema\n");
+    	}
+    	else
+    	{
+    		todoOk=1;
+    		printf("Baja exitosa\n");
+    	}
+    }
+	return todoOk;
 }
 
 /** \brief Listar empleados
@@ -163,21 +164,31 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_ListEmployee(LinkedList* pArrayListEmployee)
 {
-    int todoOk=0;
-    Employee* auxiliar=NULL;
-    if(pArrayListEmployee!=NULL)
-    {
-    	printf("Lista Empleados \n");
-    	printf("id 		nombre		horasTrabajadas		sueldo\n");
-    	for(int i=0;i<ll_len(pArrayListEmployee);i++)
-    	{
-    		auxiliar=(Employee*)ll_get(pArrayListEmployee,i);
-    		employee_mostrarUnEmpleado(auxiliar);
+	int todoOk=0;
+	int retornoDeMostrarEmpleado;
+	if(pArrayListEmployee!=NULL)
+	{
+		retornoDeMostrarEmpleado=employee_mostrarEmpleados(pArrayListEmployee);
+		if(retornoDeMostrarEmpleado==-1)
+		{
+			printf("No se puede listar Empleados, no hay empleados que mostrar\n");
+		}
+		else
+		{
+			if(retornoDeMostrarEmpleado==1)
+			{
+				printf("Se listo empleado correctamente\n");
+				todoOk=1;
+			}
+			else
+			{
+				printf("No se pudo listar Empleado\n");
+			}
 
-    	}
-    	todoOk=1;
-    }
 
+		}
+
+	}
 	return todoOk;
 }
 
@@ -190,7 +201,23 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int todoOk=0;
+
+	if(pArrayListEmployee!=NULL)
+	{
+			if(!employee_ordenar(pArrayListEmployee))
+			{
+				printf("no se pudo Realizar el ordenamiento\n");
+			}
+			else
+			{
+				printf("Ordenamiento exitoso\n");
+				todoOk=1;
+			}
+
+		}
+
+	  return todoOk;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
@@ -202,7 +229,59 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int todoOk=0;
+	FILE* f=NULL;
+	int tam;
+	int sueldo;
+	int horas;
+	char nombre[128];
+	int id;
+	int retornoGetNombre;
+	int retornoGetSueldo;
+	int retornoGetId;
+	int retornoGetHoras;
+	Employee* auxiliarEmpleado=NULL;
+		if(path!=NULL && pArrayListEmployee!=NULL)
+		{
+				f=fopen(path,"w");
+				if(f==NULL)
+				{
+					printf("Error al abrir archivo\n");
+				}
+				else
+				{
+					tam=ll_len(pArrayListEmployee);
+					fprintf(f,"id,nombre,horasTrabajadas,sueldo\n");
+					for(int i=0;i<tam;i++)
+					{
+						auxiliarEmpleado=(Employee*)ll_get(pArrayListEmployee,i);
+						if(auxiliarEmpleado!=NULL)
+						{
+							retornoGetId=employee_getId(auxiliarEmpleado,&id);
+							retornoGetNombre=employee_getNombre(auxiliarEmpleado,nombre);
+							retornoGetHoras=employee_getHorasTrabajadas(auxiliarEmpleado,&horas);
+							retornoGetSueldo=employee_getSueldo(auxiliarEmpleado,&sueldo);
+
+							if(retornoGetId && retornoGetNombre && retornoGetHoras && retornoGetSueldo)
+							{
+								 fprintf(f, "%d,%s,%d,%d\n", id, nombre, horas, sueldo);
+								 todoOk = 1;
+							}
+							else
+							{
+								printf("no se pudo guardar el archivo\n");
+							}
+
+
+						}
+
+					}
+					fclose(f);
+
+				}
+		}
+
+    return todoOk;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).
@@ -214,6 +293,38 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int todoOk=0;
+	FILE* f=NULL;
+	Employee* auxiliarEmpleado=NULL;
+	int tam;
+	if(path!=NULL && pArrayListEmployee)
+	{
+		f=fopen(path,"wb");
+		if(f==NULL)
+		{
+			printf("no se pudo abrir archivo\n");
+
+		}
+		else
+		{
+
+			tam=ll_len(pArrayListEmployee);
+			for(int i=0;i<tam;i++)
+			{
+				auxiliarEmpleado=(Employee*)ll_get(pArrayListEmployee,i);
+				if(auxiliarEmpleado!=NULL)
+				{
+					fwrite(auxiliarEmpleado,sizeof(Employee),1,f);
+					todoOk=1;
+				}
+
+			}
+
+
+		}
+		fclose(f);
+
+	}
+    return todoOk;
 }
 
