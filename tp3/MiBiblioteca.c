@@ -1,20 +1,22 @@
 /*
- * utn.c
+ * MiBiblioteca.c
  *
- *  Created on: 20 nov. 2021
+ *  Created on: 26 nov. 2021
  *      Author: 1
  */
+
+
+#include "MiBiblioteca.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
 
 int validarName(char name[],int len)
 {
     int todoOk=0;
     if(name!=NULL  && len>0)
     {
-        if(strlen(name)<len)
+        if(strlen(name)<len &&  (strlen(name)>0))
         {
         	int i=0;
            while(name[i]!='\0')
@@ -129,4 +131,22 @@ int validarCaracter(char auxChar, char a, char b)
     }
 
     return todoOk;
+}
+float aplicarDescuento(float precio, int porcentajeDescuento)
+{
+    float nuevoPrecio=-1;
+    if(precio>=0 && porcentajeDescuento>=0)
+    {
+        nuevoPrecio=precio-(precio*porcentajeDescuento/100);
+    }
+    return nuevoPrecio;
+}
+float aplicarAumento(float precio, int porcentajeAumento)
+{
+    float nuevoPrecio=-1;
+    if(precio>=0 && porcentajeAumento>=0)
+    {
+        nuevoPrecio=precio-(precio*porcentajeAumento/100);
+    }
+    return nuevoPrecio;
 }

@@ -1,7 +1,7 @@
 #include "Employee.h"
 #include "LinkedList.h"
 #include "Controller.h"
-#include "utn.h"
+#include "MiBiblioteca.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -212,10 +212,10 @@ int employee_getSueldo(Employee* this,int* sueldo)
 return todoOk;
 }
 
-int employee_mayorId(LinkedList* pArrayListEmployee)
+int employee_buscarMayorId(LinkedList* pArrayListEmployee)
 {
 	Employee* auxiliar=NULL;
-	int idMayor=-1;
+	int idMayor=0;
 	int id;
 	if(pArrayListEmployee!=NULL)
 	{
@@ -428,7 +428,8 @@ int employee_modificar(LinkedList* pArrayListEmployee)
 	                    }
 	                    break;
 	                	}//FIN DEL SWITCH
-	                }while(opcion==5);
+	                	system("pause");
+	                }while(opcion!=5);
 	            }
 
 	        }
@@ -535,23 +536,33 @@ int employee_alta(LinkedList* pArrayListEmployee)
     Employee* auxiliar;
     if(pArrayListEmployee!=NULL)
     {
+        system("pause");
     	system("cls");
     	printf("***Alta Empleado***\n");
 
     	auxiliar=employee_new();
-    	id=employee_mayorId(pArrayListEmployee);
-    	if(id==-1)
-    	printf("id mayor %d",id);
-    	if(id!=-1)
-    	{
+    	id=employee_buscarMayorId(pArrayListEmployee);
+
+    	//printf("id mayor %d",id);
+
     		id=id+1;//Asigno el siguiente
     		fflush(stdin);
-    		pedirName(name,"Ingrese nombre","Error Reingrese Nombre",128);
-    		printf("\n %s",name);
-    		pedirEntero(&horasTrabajadas,"Ingrese horas trabajadas (valor positivo)","Error Reingrese horas ",100000,1);
-    		printf("\nHoras %d\n", horasTrabajadas);
-    		pedirEntero(&sueldo,"Ingrese sueldo","Error Reingrese sueldo",1000000,1);
-    		printf("\nSueldo:%d sueldo\n",sueldo);
+
+            pedirName(name,"Ingrese nuevo Nombre","ERROR reingrese nombre",128);
+            puts(name);
+    		fflush(stdin);
+    		printf("\n ingrese horas trabajadas ");
+    		while(!scanf("%d",&horasTrabajadas))
+            {
+                fflush(stdin);
+                printf("Error ingrese horas\n");
+            }
+            printf("\ningrese sueldo\n");
+            while(!scanf("%d)",&sueldo))
+            {
+                fflush(stdin);
+                printf("ERROR reingrese sueldo\n");
+            }
 
     		//llamo a los setters
     		retornodeSetterId=employee_setId(auxiliar,id);
@@ -569,12 +580,14 @@ int employee_alta(LinkedList* pArrayListEmployee)
     			employee_delete(auxiliar);
     		}
     	}
-    }
-
-printf("retorno de alta %d\n",todoOk);
+    	printf("retorno de alta %d\n",todoOk);
 
 	return todoOk;
+
 }
+
+
+
 
 int employee_mostrarEmpleados(LinkedList* pArrayListEmployee)
 {
@@ -728,25 +741,27 @@ int employee_ordenar(LinkedList* pArrayListEmployee)
 	if(pArrayListEmployee!=NULL)
 	{
 		//auxiliar=pArrayListEmployee;
+
 	do{
+            //LinkedList* auxLinkedList=ll_clone(pArrayListEmployee)
 		switch(menuOrdenar())
 		{
 		case 1:
 			printf("Ordenar por nombre\n");
 			ll_sort(pArrayListEmployee,employee_ordenarPorNombre,1);
-			//controller_ListEmployee(pArrayListEmployee);
+			controller_ListEmployee(pArrayListEmployee);
 			seOrdeno=1;
 			break;
 		case 2:
 			printf("Ordenar por horas\n");
 			ll_sort(pArrayListEmployee,employee_ordenarPorHora,1);
-			//controller_ListEmployee(pArrayListEmployee);
+			controller_ListEmployee(pArrayListEmployee);
 			seOrdeno=1;
 			break;
 		case 3:
 			printf("Ordenar por sueldo\n");
 			ll_sort(pArrayListEmployee,employee_ordenarPorSueldo,1);
-			//controller_ListEmployee(pArrayListEmployee);
+			controller_ListEmployee(pArrayListEmployee);
 			seOrdeno=1;
 			break;
 		case 4:
@@ -758,16 +773,11 @@ int employee_ordenar(LinkedList* pArrayListEmployee)
 			break;
 		}
 		system("pause");
-	}while(opcion==5);
-
-	if(seOrdeno==1)
-	{
-		controller_ListEmployee(pArrayListEmployee);
-
-
-
-		todoOk=1;
-	}
+	}while(opcion!=5);
+	if(seOrdeno)
+    {
+        todoOk=1;
+    }
 
 	}
 
@@ -826,3 +836,4 @@ int menu()
 	    return opcion;
 
 }
+
